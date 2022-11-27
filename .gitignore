@@ -1,3 +1,7 @@
 stream_config.json
 __pycache__
 .DS_Store
+
+# Added by cargo
+
+/target

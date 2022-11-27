@@ -38,7 +38,7 @@ The rest of the instructions are done from the Terminal.
 
 ## Install Open Source Dependencies
 
-`brew install python git gstreamer gst-plugins-base gst-plugins-good sound-touch gst-devtools switchaudio-osx`
+`brew install rust git gstreamer gst-plugins-base gst-plugins-good sound-touch gst-devtools`
 
 ## Fix gst-plugins-bad build
 
@@ -75,19 +75,19 @@ Save the "file" and exit your editor (e.g. Ctrl+X and follow prompts in nano.)
 
 `git clone https://github.com/allquixotic/macpitch`
 
-## Satisfy the build requirements
+## Build the program
 
-`pip3 install -r requirements.txt`
+`cargo build --release`
 
 ## Create the config file
 
-Create the file `stream_config.json` in the same directory as the file `macpitch.py` of this repository, e.g. using `nano stream_config.json`
+Create the file `stream_config.json` in the base directory of this repository, e.g. using `nano stream_config.json`
 
 Example:
 
 ```
 {
-    "pitch": "0.99",
+    "pitch": 0.99,
     "input_name": "Loopback Audio",
     "output_name": "MacBook Pro Speakers"
 }
@@ -99,7 +99,7 @@ Example:
 
 ## Run this program
 
-`python3 macpitch.py`
+`./run.sh` or `./target/release/macpitch`
 
 This will:
 
