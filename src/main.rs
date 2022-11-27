@@ -158,9 +158,9 @@ fn main() {
             for _sig in iter {
                 set_default_device(false, default_output_id);
                 //TODO: do this using CoreAudio instead of an osascript that might get deprecated
-                let mut inner_child = Command::new("osascript").args(["-e", "set Volume 2"]).spawn().unwrap();
+                let mut inner_child = Command::new("osascript").args(["-e", "set Volume 3"]).spawn().unwrap();
                 match inner_child.wait() {
-                    Ok(_) => println!("Set volume to 2"),
+                    Ok(_) => println!("Set volume to 3"),
                     Err(_) => println!("WARN: osascript errored")
                 };
                 break 'outer;
