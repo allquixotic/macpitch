@@ -21,7 +21,8 @@ struct AudioDevice {
 struct ProgramOptions {
     pitch: f32,
     input_name: String,
-    output_name: String
+    output_name: String,
+    set_defaults: bool,
 }
 
 fn set_default_device(input: bool, mut id: u32) {
@@ -146,7 +147,9 @@ fn main() {
         output_device_id.expect(&format!("Couldn't find output device {}", &opts.output_name)));
 
 
-    set_default_device(false, input_device_id.unwrap());
+    if opts.set_defaults {
+        set_default_device(false, input_device_id.unwrap());
+    }
 
     println!("Running command: {}", exec_str);
     let mut child = Command::new("gst-launch-1.0").args(exec_str.split(" ")).spawn().unwrap();
@@ -156,13 +159,16 @@ fn main() {
         'outer: loop {
             let iter = signals.wait();
             for _sig in iter {
-                set_default_device(false, default_output_id);
-                //TODO: do this using CoreAudio instead of an osascript that might get deprecated
-                let mut inner_child = Command::new("osascript").args(["-e", "set Volume 3"]).spawn().unwrap();
-                match inner_child.wait() {
-                    Ok(_) => println!("Set volume to 3"),
-                    Err(_) => println!("WARN: osascript errored")
-                };
+                println!("Caught signal, exiting...");
+                if opts.set_defaults {
+                    set_default_device(false, default_output_id);
+                    //TODO: do this using CoreAudio instead of an osascript that might get deprecated
+                    let mut inner_child = Command::new("osascript").args(["-e", "set Volume 3"]).spawn().unwrap();
+                    match inner_child.wait() {
+                        Ok(_) => println!("Set volume to 3"),
+                        Err(_) => println!("WARN: osascript errored")
+                    };
+                }                
                 break 'outer;
             }
         }
